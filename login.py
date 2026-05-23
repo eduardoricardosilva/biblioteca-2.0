@@ -20,7 +20,7 @@ frame_login = ctk.CTkFrame(
     janela_login,
     width=350,
     height=400,
-    fg_color="#1d6b30",
+    fg_color="#34af52",
     border_color="#65dd36",
     border_width=1.5,
     corner_radius=10)
@@ -93,6 +93,7 @@ user_entry.grid(row=0,column=1)
 
 #region frame_senha
 
+
 frame_senha = ctk.CTkFrame(
     frame_login,
     fg_color="transparent")
@@ -117,6 +118,39 @@ senha_entry = ctk.CTkEntry(
     border_color="black",
 )
 senha_entry.grid(row=1, column=1)
+
+frame_icone = ctk.CTkFrame(
+    frame_senha,
+    fg_color="#c4e7bd")
+frame_icone.grid(row=1, column=1,pady=5,padx=(175,0))
+
+senha_visivel = False
+
+def mostrar_senha():
+    global senha_visivel
+
+    if senha_visivel:
+        senha_entry.configure(show="*")
+        botao_olho.configure(text="👁")
+        senha_visivel = False
+    else:
+        senha_entry.configure(show="")
+        botao_olho.configure(text="🙈")
+        senha_visivel = True
+
+botao_olho = ctk.CTkButton(
+    frame_icone,
+    font=("Segoe UI Emoji", 17),
+    text="👁",
+    width=25,
+    height=25,
+    fg_color="#c4e7bd",
+    hover_color="#c4e7bd",
+    text_color="black",
+    border_width=0,
+    command=mostrar_senha
+)
+botao_olho.grid(row=0, column=0)
 #endregion
 
 #region frame_btn
@@ -133,6 +167,7 @@ btn_login = ctk.CTkButton(
     height=40,
     text="🔑 ENTRAR",
     font=("Segoe UI", 12, "bold"),
+    corner_radius=25,
     border_width=1,
     border_color="#102517"
     )
