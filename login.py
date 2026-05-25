@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from CTkMessagebox import CTkMessagebox
 
-
+#region config_tela
 #def montar_tela_login(janela_login, validar_e_entrar):
     # Tema
 ctk.set_appearance_mode("dark")
@@ -20,7 +20,7 @@ frame_login = ctk.CTkFrame(
     janela_login,
     width=350,
     height=400,
-    fg_color="#34af52",
+    fg_color="#5eb373",
     border_color="#65dd36",
     border_width=1.5,
     corner_radius=10)
@@ -29,6 +29,7 @@ frame_login.grid(row=0, column=0, padx=30, pady=30)
 frame_login.grid_propagate(False)
 frame_login.grid_columnconfigure(0, weight=1)
 
+#endregion
 
 #region frame_titulo
 frame_titulo = ctk.CTkFrame(
@@ -172,6 +173,33 @@ btn_login = ctk.CTkButton(
     border_color="#102517"
     )
 btn_login.grid(row=0, column=0)
+
 #endregion
+
+
+def validar_senha(senha):
+
+    if len(senha) < 8:
+        return "A senha precisa ter no mínimo 8 caracteres"
+
+    elif not any(c.islower() for c in senha):
+        return "A senha precisa ter letra minúscula"
+
+    elif not any(c.isupper() for c in senha):
+        return "A senha precisa ter letra maiúscula"
+
+    elif not any(c.isdigit() for c in senha):
+        return "A senha precisa ter número"
+
+    elif not any(c in "@#$%&*!?" for c in senha):
+        return "A senha precisa ter caractere especial"
+
+    return True
+
+
+
+
+
+
 
 janela_login.mainloop()
