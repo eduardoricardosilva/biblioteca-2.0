@@ -57,7 +57,7 @@ frame_btn_livros.grid(row=1, column=0, pady=10)
 btn_livros = ctk.CTkButton(
     frame_btn_livros,
     text="Livros",
-    font=("Segoe UI Semibold", 25),
+    font=("Segoe UI Semibold", 20),
     width=175,
     height=30,
     fg_color="#094217",
@@ -81,7 +81,7 @@ frame_btn_alunos.grid(row=2, column=0, pady=10)
 btn_alunos = ctk.CTkButton(
     frame_btn_alunos,
     text="Alunos",
-    font=("Segoe UI Semibold", 25),
+    font=("Segoe UI Semibold", 20),
     width=175,
     height=30,
     fg_color="#094217",
@@ -104,7 +104,7 @@ frame_btn_emp.grid(row=3, column=0, pady=10)
 btn_emp = ctk.CTkButton(
     frame_btn_emp,
     text="Empréstimos",
-    font=("Segoe UI Semibold", 25),
+    font=("Segoe UI Semibold", 20),
     width=175,
     height=30,
     fg_color="#094217",
@@ -130,7 +130,7 @@ frame_btn_backup.grid(row=4, column=0, pady=10)
 btn_backup = ctk.CTkButton(
     frame_btn_backup,
     text="Backup",
-    font=("Segoe UI Semibold", 25),
+    font=("Segoe UI Semibold", 20),
     width=175,
     height=30,
     fg_color="#094217",
@@ -161,7 +161,7 @@ btn_sair= ctk.CTkButton(
     border_color="#000000",
     border_width=1.3,
     corner_radius=5,
-    hover_color="#b63131"
+    hover_color="#cf4a4a"
 )
 btn_sair.grid(row=0, column=0)
 #endregion
