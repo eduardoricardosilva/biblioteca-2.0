@@ -9,6 +9,7 @@ ctk.set_default_color_theme("green")
 janela_principal = ctk.CTk()
 janela_principal.geometry("500x600")
 janela_principal.title("Menu Principal")
+janela_principal.configure(fg_color="#121212")
 janela_principal.grid_columnconfigure(0, weight=1)
 janela_principal.grid_rowconfigure(0, weight=1)
 
@@ -16,8 +17,8 @@ frame_principal = ctk.CTkFrame(
     janela_principal,
     width=400,
     height=500,
-    fg_color="#5eb373",
-    border_color="#65dd36",
+    fg_color="#1f6f3a",
+    border_color="#4ade80",
     border_width=1.5,
     corner_radius=10
 )
@@ -29,7 +30,7 @@ frame_principal.grid_columnconfigure(0,weight=1)
 #region principal
 frame_titulo_principal = ctk.CTkFrame(
     frame_principal,
-    fg_color="#5eb373",
+    fg_color="#1f6f3a",
     width=300,
     height=50
 )
@@ -37,11 +38,11 @@ frame_titulo_principal.grid(row=0, column=0, pady=(35))
 
 title_principal = ctk.CTkLabel(
     frame_titulo_principal,
-    text="Bem-vindo ao Menu Principal",
-    font=("Segoe UI Semibold",25),
+    text="Sistema de Biblioteca",
+    font=("Segoe UI Semibold",24),
     text_color="#000000"
 )
-title_principal.grid(row=0, column=0)
+title_principal.grid(row=0, column=0,pady=10)
 #endregion
 
 #region botao_livros
@@ -63,7 +64,7 @@ btn_livros = ctk.CTkButton(
     fg_color="#094217",
     border_color="#0d3a07",
     border_width=1.3,
-    corner_radius=5
+    corner_radius=5,
 )
 btn_livros.grid(row=0,column=0)
 
@@ -157,13 +158,13 @@ btn_sair= ctk.CTkButton(
     font=("Segoe UI Semibold", 15),
     width=90,
     height=30,
-    fg_color="#cc1919",
+    fg_color="#b91c1c",
     border_color="#000000",
     border_width=1.3,
     corner_radius=5,
     hover_color="#cf4a4a"
 )
-btn_sair.grid(row=0, column=0)
+btn_sair.grid(row=0, column=0,pady=10)
 #endregion
 
 
