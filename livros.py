@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from CTkMessagebox import CTkMessagebox
+from PIL import Image
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
@@ -46,6 +47,7 @@ ctk.CTkButton(
 
 #region titulo
 
+
 frame_titulo_livros = ctk.CTkFrame(
     frame_livros,
     fg_color="transparent",
@@ -63,8 +65,36 @@ title_livros = ctk.CTkLabel(
 title_livros.grid(row=0,column=0)
 #endregion
 
-#region 
+#region cad_livros
 
+frame_cad_livros = ctk.CTkFrame(
+    frame_livros,
+    fg_color = "transparent",
+    width = 350,
+    height=60
+)
+frame_cad_livros.grid(row=1,column=0,pady=(20,5))
+
+cad_livros = ctk.CTkButton(
+    frame_cad_livros,
+    text="🕮  Cadastrar Livro",
+    font=("Segoe UI Semibold",15),
+    text_color="#ffffff",
+    fg_color="#429259",
+    hover_color="#347547",
+    width = 225,
+    height=40,
+    corner_radius=5
+    
+)
+cad_livros.grid(row=0,column=0)
+
+#endregion
+
+#region edit_livro
+
+
+#endregion
 
 
 
