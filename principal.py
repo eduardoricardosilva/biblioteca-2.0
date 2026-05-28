@@ -9,7 +9,7 @@ ctk.set_default_color_theme("green")
 janela_principal = ctk.CTk()
 janela_principal.geometry("500x600")
 janela_principal.title("Menu Principal")
-janela_principal.configure(fg_color="#121212")
+janela_principal.configure(fg_color="#dfecdf")
 janela_principal.grid_columnconfigure(0, weight=1)
 janela_principal.grid_rowconfigure(0, weight=1)
 
@@ -17,10 +17,8 @@ frame_principal = ctk.CTkFrame(
     janela_principal,
     width=400,
     height=500,
-    fg_color="#1f6f3a",
-    border_color="#4ade80",
-    border_width=1.5,
-    corner_radius=10
+    fg_color="#cae9ca",
+
 )
 frame_principal.grid(row=0, column=0, padx=20, pady=20)
 frame_principal.grid_propagate(False)
@@ -30,7 +28,7 @@ frame_principal.grid_columnconfigure(0,weight=1)
 #region principal
 frame_titulo_principal = ctk.CTkFrame(
     frame_principal,
-    fg_color="#1f6f3a",
+    fg_color="#cae9ca",
     width=300,
     height=50
 )
@@ -38,9 +36,9 @@ frame_titulo_principal.grid(row=0, column=0, pady=(35))
 
 title_principal = ctk.CTkLabel(
     frame_titulo_principal,
-    text="Sistema de Biblioteca",
+    text="SISTEMA DE BIBLIOTECA",
     font=("Segoe UI Semibold",24),
-    text_color="#000000"
+    text_color="#163822"
 )
 title_principal.grid(row=0, column=0,pady=10)
 #endregion
@@ -61,10 +59,7 @@ btn_livros = ctk.CTkButton(
     font=("Segoe UI Semibold", 20),
     width=175,
     height=30,
-    fg_color="#094217",
-    border_color="#0d3a07",
-    border_width=1.3,
-    corner_radius=5,
+    fg_color="#429259",
 )
 btn_livros.grid(row=0,column=0)
 
@@ -85,10 +80,7 @@ btn_alunos = ctk.CTkButton(
     font=("Segoe UI Semibold", 20),
     width=175,
     height=30,
-    fg_color="#094217",
-    border_color="#0d3a07",
-    border_width=1.3,
-    corner_radius=5
+    fg_color="#429259",
 )
 btn_alunos.grid(row=0, column=0)
 #endregion
@@ -108,10 +100,7 @@ btn_emp = ctk.CTkButton(
     font=("Segoe UI Semibold", 20),
     width=175,
     height=30,
-    fg_color="#094217",
-    border_color="#0d3a07",
-    border_width=1.3,
-    corner_radius=5
+    fg_color="#429259",
 )
 btn_emp.grid(row=0, column=0)
 
@@ -134,10 +123,7 @@ btn_backup = ctk.CTkButton(
     font=("Segoe UI Semibold", 20),
     width=175,
     height=30,
-    fg_color="#094217",
-    border_color="#0d3a07",
-    border_width=1.3,
-    corner_radius=5
+    fg_color="#429259",
 )
 btn_backup.grid(row=0, column=0)
 #endregion
