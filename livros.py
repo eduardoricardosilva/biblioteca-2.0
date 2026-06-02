@@ -6,7 +6,9 @@ import sqlite3
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
 
-#region config_tela_livros
+#region BOTÕES DA TELA
+
+    #region config_tela_livros
 
 def montar_tela_livros(janela_livros, funcao_voltar):
 
@@ -201,8 +203,10 @@ def montar_tela_livros(janela_livros, funcao_voltar):
     edit_autor.grid(row=0, column=0)
 
     #endregion
+#endregion
 
 #region do botão de cadastro de livros
+
 
 def montar_tela_cadastrar_livro(janela_cad_livros, voltar_livros, voltar_menu,):
 
@@ -622,7 +626,7 @@ def montar_tela_cadastrar_livro(janela_cad_livros, voltar_livros, voltar_menu,):
 
 #endregion
 
-#region da botão de editar livro
+#region do botão de editar livro
 
 def montar_tela_editar_livro(janela_edit_livros, voltar_livros, voltar_menu,):
 
@@ -693,30 +697,29 @@ def montar_tela_editar_livro(janela_edit_livros, voltar_livros, voltar_menu,):
     combo_edit.grid(row=2, column=0, columnspan=2,pady=(0,5))
     combo_edit.set("Selecione...")
 
-
-
-
-
-
-
+    titulo_entry = ctk.CTkEntry(
+        frame_tela_edit_livros,
+        width=200,
+        height=25
+    )
+    titulo_entry.grid(row=3,column=0)
 
 #============FUNÇÔES TELA EDITAR LIVRO================
 
-def buscar_livro():
-    try:
-        conn = sqlite3.connect("banco.db")
-        cursor = conn.cursor()
-        cursor.execute("SELECT titulo FROM livros ORDER BY titulo ASC")
-        resultado = cursor.fetchall()
-        conn.close()
-        lista_livros = [titulo[0] for titulo in resultado]
-        return lista_livros
-    except sqlite3.Error as erro:
-        print(f"Erro ao buscar dados {erro}")
-        return[]
+    def buscar_livro():
+        try:
+            conn = sqlite3.connect("banco.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT titulo FROM livros ORDER BY titulo ASC")
+            resultado = cursor.fetchall()
+            conn.close()
+            lista_livros = [titulo[0] for titulo in resultado]
+            return lista_livros
+        except sqlite3.Error as erro:
+            print(f"Erro ao buscar dados {erro}")
+            return[]
 
-
-
+    
 
 #endregion
 
