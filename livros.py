@@ -3,12 +3,40 @@ from CTkMessagebox import CTkMessagebox
 from PIL import Image
 import sqlite3
 
-ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("green")
+def carregar_generos():
+        try:
+            conn = sqlite3.connect("banco.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT nome FROM generos ORDER BY nome ASC")
+            resultados = cursor.fetchall()
+            conn.close()
+            lista_generos = [genero[0] for genero in resultados]
+            return lista_generos
+        except sqlite3.Error as erro:
+            print(f"Erro ao buscar dados {erro}")
+            return []
 
-#region BOTÕES DA TELA
+
+def carregar_autores():
+    try:
+        conn = sqlite3.connect("banco.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT nome FROM autores ORDER BY nome ASC")
+        resultados = cursor.fetchall()
+        conn.close()
+        lista_autores = [autores[0] for autores in resultados]
+        return lista_autores
+    except sqlite3.Error as erro:
+        print(f"Erro ao buscar dados {erro}")
+        return[]
+
+
+#region BOTÕES DA TELA GERENCIAMENTOS de LIVROS
 
     #region config_tela_livros
+
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("green")
 
 def montar_tela_livros(janela_livros, funcao_voltar):
 
@@ -52,7 +80,7 @@ def montar_tela_livros(janela_livros, funcao_voltar):
 
     #endregion
 
-    #region titulo
+    #region titulo da tela
 
 
     frame_titulo_livros = ctk.CTkFrame(
@@ -72,7 +100,7 @@ def montar_tela_livros(janela_livros, funcao_voltar):
     title_livros.grid(row=0,column=0)
     #endregion
 
-    #region btn_cad_livros
+    #region 1- btn_cad_livros
 
     frame_cad_livros = ctk.CTkFrame(
         frame_livros,
@@ -100,7 +128,7 @@ def montar_tela_livros(janela_livros, funcao_voltar):
 
     #endregion
 
-    #region btn_edit_livro
+    #region 2- btn_edit_livro
 
     frame_edit_livros = ctk.CTkFrame(
         frame_livros,
@@ -205,8 +233,9 @@ def montar_tela_livros(janela_livros, funcao_voltar):
     #endregion
 #endregion
 
-#region do botão de cadastro de livros
+#region 1- do botão de cadastro de livros
 
+    #region config tela cadatrar livro
 
 def montar_tela_cadastrar_livro(janela_cad_livros, voltar_livros, voltar_menu,):
 
@@ -230,6 +259,9 @@ def montar_tela_cadastrar_livro(janela_cad_livros, voltar_livros, voltar_menu,):
     frame_tela_cad_livros.grid_columnconfigure(0,weight=1)
     frame_tela_cad_livros.grid_columnconfigure(1, weight=1)
     
+    #endregion
+
+    #region btn voltar
 
     ctk.CTkButton(
         janela_cad_livros,
@@ -245,103 +277,9 @@ def montar_tela_cadastrar_livro(janela_cad_livros, voltar_livros, voltar_menu,):
         corner_radius=5
     ).grid(row=0, column=0, sticky="w", padx=5, pady=5)
 
-    titulo = ctk.CTkLabel(
-        frame_tela_cad_livros,
-        text="CADASTRAR LIVRO",
-        font=("Segoe UI Semibold",24),
-        text_color="#163822"
-    )
-    titulo.grid(row=0,column=0,columnspan=2,pady=20)
+    #endregion
 
-#==========TITULO DO LIVRO==========
-
-    label_titulo_cad = ctk.CTkLabel(
-            frame_tela_cad_livros,
-            text="Título do livro",
-            font=("Segoe UI Semibold", 12),
-            text_color="#000",
-    )
-    label_titulo_cad.grid(row=1, column=0, pady=0)
-    entry_titulo = ctk.CTkEntry(
-        frame_tela_cad_livros,
-        width=160,
-        height=25,
-        fg_color="#fff",
-        text_color="#000",
-        font=("Segoe UI Semibold", 12),
-        border_color="#7dbb8a",
-        border_width=1,
-        corner_radius=4
-    )
-    entry_titulo.grid(row=2, column=0, pady=(0,10))
-
-#========EDITORA==========
-
-    label_editora = ctk.CTkLabel(
-        frame_tela_cad_livros,
-        text="Editora",
-        font=("Segoe UI Semibold", 12),
-            text_color="#000",
-    )
-    label_editora.grid(row=1, column=1, pady=0)
-    entry_editora = ctk.CTkEntry(
-        frame_tela_cad_livros,
-        width=160,
-        height=25,
-        fg_color="#fff",
-        text_color="#000",
-        font=("Segoe UI Semibold", 12),
-        border_color="#7dbb8a",
-        border_width=1,
-        corner_radius=4
-    )
-    entry_editora.grid(row=2, column=1, pady=(0,10))
-
-#==========QUANTIDADE DE LIVRO==========
-
-    label_quant = ctk.CTkLabel(
-        frame_tela_cad_livros,
-        text="Quantidade",
-        font=("Segoe UI Semibold", 12),
-        text_color="#000",
-    )
-    label_quant.grid(row=3, column=0, pady=0)
-    entry_quant = ctk.CTkEntry(
-        frame_tela_cad_livros,
-        width=160,
-        height=25,
-        fg_color="#fff",
-        text_color="#000",
-        font=("Segoe UI Semibold", 12),
-        border_color="#7dbb8a",
-        border_width=1,
-        corner_radius=4
-    )
-    entry_quant.grid(row=4, column=0, pady=(0,10))
-
-#==========ISBN==========
-
-    label_isbn = ctk.CTkLabel(
-        frame_tela_cad_livros,
-        text="ISBN",
-        font=("Segoe UI Semibold", 12),
-        text_color="#000",
-    )
-    label_isbn.grid(row=3, column=1,pady=0)
-    entry_isbn = ctk.CTkEntry(
-        frame_tela_cad_livros,
-        width=160,
-        height=25,
-        fg_color="#fff",
-        text_color="#000",
-        font=("Segoe UI Semibold", 12),
-        border_color="#7dbb8a",
-        border_width=1,
-        corner_radius=4
-    )
-    entry_isbn.grid(row=4,column=1,pady=(0,10))
-
-#================FUNÇÕES=================
+    #region das funções cadastro de livros
 
     def carregar_generos():
         try:
@@ -501,7 +439,120 @@ def montar_tela_cadastrar_livro(janela_cad_livros, voltar_livros, voltar_menu,):
             print(f"Erro ao buscar dados {erro}")
             return[]
 
-#==========GÊNERO DO LIVRO==========
+    #endregion
+
+    #region titulo da tela
+
+    titulo = ctk.CTkLabel(
+        frame_tela_cad_livros,
+        text="CADASTRAR LIVRO",
+        font=("Segoe UI Semibold",24),
+        text_color="#163822"
+    )
+    titulo.grid(row=0,column=0,columnspan=2,pady=20)
+
+    #endregion
+
+    #region Cad titulo do livro
+
+    label_titulo_cad = ctk.CTkLabel(
+            frame_tela_cad_livros,
+            text="Título do livro",
+            font=("Segoe UI Semibold", 12),
+            text_color="#000",
+    )
+    label_titulo_cad.grid(row=1, column=0, pady=0)
+    entry_titulo = ctk.CTkEntry(
+        frame_tela_cad_livros,
+        width=160,
+        height=25,
+        fg_color="#fff",
+        text_color="#000",
+        font=("Segoe UI Semibold", 12),
+        border_color="#7dbb8a",
+        border_width=1,
+        corner_radius=4
+    )
+    entry_titulo.grid(row=2, column=0, pady=(0,10))
+
+    #endregion
+
+    #region Cad editora do livro
+
+    lista_generos = carregar_generos()
+    lista_autores = carregar_autores()
+
+    label_editora = ctk.CTkLabel(
+        frame_tela_cad_livros,
+        text="Editora",
+        font=("Segoe UI Semibold", 12),
+            text_color="#000",
+    )
+    label_editora.grid(row=1, column=1, pady=0)
+    entry_editora = ctk.CTkEntry(
+        frame_tela_cad_livros,
+        width=160,
+        height=25,
+        fg_color="#fff",
+        text_color="#000",
+        font=("Segoe UI Semibold", 12),
+        border_color="#7dbb8a",
+        border_width=1,
+        corner_radius=4
+    )
+    entry_editora.grid(row=2, column=1, pady=(0,10))
+
+    #endregion
+
+    #region Cad quantidade de livro
+
+    label_quant = ctk.CTkLabel(
+        frame_tela_cad_livros,
+        text="Quantidade",
+        font=("Segoe UI Semibold", 12),
+        text_color="#000",
+    )
+    label_quant.grid(row=3, column=0, pady=0)
+    entry_quant = ctk.CTkEntry(
+        frame_tela_cad_livros,
+        width=160,
+        height=25,
+        fg_color="#fff",
+        text_color="#000",
+        font=("Segoe UI Semibold", 12),
+        border_color="#7dbb8a",
+        border_width=1,
+        corner_radius=4
+    )
+    entry_quant.grid(row=4, column=0, pady=(0,10))
+
+    #endregion
+
+    #region isbn do livro
+
+    label_isbn = ctk.CTkLabel(
+        frame_tela_cad_livros,
+        text="ISBN",
+        font=("Segoe UI Semibold", 12),
+        text_color="#000",
+    )
+    label_isbn.grid(row=3, column=1,pady=0)
+    entry_isbn = ctk.CTkEntry(
+        frame_tela_cad_livros,
+        width=160,
+        height=25,
+        fg_color="#fff",
+        text_color="#000",
+        font=("Segoe UI Semibold", 12),
+        border_color="#7dbb8a",
+        border_width=1,
+        corner_radius=4
+    )
+    entry_isbn.grid(row=4,column=1,pady=(0,10))
+
+    #endregion
+
+    #region Cad genero do livro
 
     label_genero = ctk.CTkLabel(
         frame_tela_cad_livros,
@@ -556,7 +607,10 @@ def montar_tela_cadastrar_livro(janela_cad_livros, voltar_livros, voltar_menu,):
     )
     entry_cad_genero.grid(row=6, column=1,pady=(0,10))
 
-#==========AUTOR DO LIVRO==========
+    #endregion
+
+    #region Cad autor do livro
+
     label_autor = ctk.CTkLabel(
         frame_tela_cad_livros,
         text="Selecione o autor",
@@ -611,6 +665,10 @@ def montar_tela_cadastrar_livro(janela_cad_livros, voltar_livros, voltar_menu,):
     )
     entry_cad_autor.grid(row=8, column=1,pady=(0,10))
 
+    #endregion
+
+    #region Btn Salvar livro
+
 #==========BOTÂO SALVAR LIVRO==========
 
     btn_salvar = ctk.CTkButton(
@@ -624,11 +682,16 @@ def montar_tela_cadastrar_livro(janela_cad_livros, voltar_livros, voltar_menu,):
     )
     btn_salvar.grid(row=9, column=0, columnspan=2,pady=20)
 
+    #endregion
+
 #endregion
 
-#region do botão de editar livro
+#region 2- do botão de editar livro
 
+    #region config tela editar livro
 def montar_tela_editar_livro(janela_edit_livros, voltar_livros, voltar_menu,):
+
+    
 
     for widget in janela_edit_livros.winfo_children():
         widget.destroy()
@@ -665,6 +728,152 @@ def montar_tela_editar_livro(janela_edit_livros, voltar_livros, voltar_menu,):
         corner_radius=5
     ).grid(row=0, column=0, sticky="w", padx=5, pady=5)
 
+    #endregion
+
+    #region funções tela editar livro
+
+#============FUNÇÔES TELA EDITAR LIVRO================
+
+    def buscar_livro():
+        try:
+            conn = sqlite3.connect("banco.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, titulo FROM livros ORDER BY titulo ASC")
+            resultado = cursor.fetchall()
+            conn.close()
+            lista_livros = [f"{livro[0]} - {livro[1]}" for livro in resultado]
+            return lista_livros
+        except sqlite3.Error as erro:
+            print(f"Erro ao buscar dados {erro}")
+            return[]
+
+    def buscar_dados_livro(id_livro):
+        try:
+            conn = sqlite3.connect("banco.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT livros.titulo, livros.editora, livros.quantidade,livros.isbn, generos.nome, autores.nome FROM livros LEFT JOIN generos ON livros.genero_id = generos.id LEFT JOIN autores ON livros.autor_id = autores.id WHERE livros.id = ?", (id_livro,))
+            resultado_busca = cursor.fetchone()
+            conn.close
+            return resultado_busca
+
+        except sqlite3.Error as erro:
+            print(f"Erro ao buscar livro: {erro}")
+            return None
+
+    def preencher_campos(livro_selecionado):
+        
+        livro_id = livro_selecionado.split(" - ")[0]
+        dados = buscar_dados_livro(livro_id)
+
+        if not dados:
+            return
+
+        titulo = dados[0]
+        editora = dados[1]
+        quantidade = dados[2]
+        isbn = dados[3]
+        genero = dados[4]
+        autor = dados[5]
+
+        titulo_entry.delete(0, "end")
+        editora_entry.delete(0, "end")
+        quant_entry.delete(0, "end")
+        isbn_entry.delete(0, "end")
+
+        titulo_entry.insert(0, titulo)
+        editora_entry.insert(0, editora)
+        quant_entry.insert(0, quantidade)
+        isbn_entry.insert(0, isbn)
+
+        combo_edit_genero.set(genero)
+        combo_edit_autor.set(autor)
+
+
+
+    def atualizar_livro():
+
+        livro_selecionado = combo_edit.get()
+        livro_id = livro_selecionado.split(" - ")[0]
+        titulo = titulo_entry.get()
+        editora = editora_entry.get()
+        quantidade = quant_entry.get()
+        isbn = isbn_entry.get()
+        genero = combo_edit_genero.get()
+        autor = combo_edit_autor.get()
+
+
+        if titulo == "":
+            CTkMessagebox(
+                title="Aviso",
+                message="Titulo não pode ficar em branco",
+                icon="warning")
+            return
+
+        elif editora == "":
+            CTkMessagebox(
+                title="Aviso",
+                message="Editora não pode ficar em branco",
+                icon="warning")
+            return
+
+        elif quantidade == "":
+            CTkMessagebox(
+                title="Aviso",
+                message="Quantidade não pode ficar em branco",
+                icon="warning")
+            return
+
+        elif isbn == "":
+            CTkMessagebox(
+                title="Aviso",
+                message="ISBN não pode ficar em branco",
+                icon="warning")
+            return
+
+        conn = sqlite3.connect("banco.db")
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "SELECT id FROM generos WHERE nome = ?",(genero,)
+        )
+        resultado_genero = cursor.fetchone()
+        genero_id = resultado_genero[0]
+
+        cursor.execute(
+            "SELECT id FROM autores WHERE nome = ?", (autor,)
+        )
+        resultado_autor = cursor.fetchone()
+        autor_id = resultado_autor[0]
+
+        cursor.execute("""
+            UPDATE livros 
+            SET titulo = ?,
+                editora = ?,
+                quantidade = ?,
+                isbn = ?,
+                genero_id = ?,
+                autor_id = ?
+            WHERE id = ?""",(
+                titulo,
+                editora,
+                quantidade,
+                isbn,
+                genero_id,
+                autor_id,
+                livro_id
+            ))
+
+        conn.commit()
+        conn.close()
+
+        CTkMessagebox(
+            title="Sucesso",
+            message="Livro atualizado com sucesso!",
+            icon="check")
+
+    #endregion
+
+    #region titulo
 
     label_titulo_edit = ctk.CTkLabel(
         frame_tela_edit_livros,
@@ -673,6 +882,10 @@ def montar_tela_editar_livro(janela_edit_livros, voltar_livros, voltar_menu,):
         text_color="#163822"
     )
     label_titulo_edit.grid(row=0,column=0,columnspan=2,pady=10)
+
+    #endregion
+
+    #region para selecionar o livro para editar
 
     label_edit = ctk.CTkLabel(
         frame_tela_edit_livros,
@@ -685,6 +898,7 @@ def montar_tela_editar_livro(janela_edit_livros, voltar_livros, voltar_menu,):
     combo_edit = ctk.CTkComboBox(
         frame_tela_edit_livros,
         values=buscar_livro(),
+        command=preencher_campos,
         width=250,
         height=25,
         fg_color="#fff",
@@ -697,33 +911,159 @@ def montar_tela_editar_livro(janela_edit_livros, voltar_livros, voltar_menu,):
     combo_edit.grid(row=2, column=0, columnspan=2,pady=(0,5))
     combo_edit.set("Selecione...")
 
+    #endregion
+
+    #region dados dos livros para editar
+
+    titulo_edit = ctk.CTkLabel(
+        frame_tela_edit_livros,
+        text="Título",
+        font=("Segoe UI Semibold", 11),
+        text_color="#000"
+    )
+    titulo_edit.grid(row=3,column=0,sticky="w",padx=(80,0),pady=(10,0))
+
     titulo_entry = ctk.CTkEntry(
         frame_tela_edit_livros,
-        width=200,
-        height=25
+        width=175,
+        height=20,
+        text_color="#000",
+        fg_color="#fff",
+        font=("Segoe UI Semibold", 11),
+        border_color="#7dbb8a",
+        border_width=1,
+        corner_radius=4
     )
-    titulo_entry.grid(row=3,column=0)
+    titulo_entry.grid(row=4,column=0,sticky="w", pady=0,padx=20)
 
-#============FUNÇÔES TELA EDITAR LIVRO================
+    editora_edit = ctk.CTkLabel(
+        frame_tela_edit_livros,
+        text="Editora",
+        font=("Segoe UI Semibold", 11),
+        text_color="#000"
+    )
+    editora_edit.grid(row=3,column=1,sticky="e", padx=(0,80),pady=(10,0))
 
-    def buscar_livro():
-        try:
-            conn = sqlite3.connect("banco.db")
-            cursor = conn.cursor()
-            cursor.execute("SELECT titulo FROM livros ORDER BY titulo ASC")
-            resultado = cursor.fetchall()
-            conn.close()
-            lista_livros = [titulo[0] for titulo in resultado]
-            return lista_livros
-        except sqlite3.Error as erro:
-            print(f"Erro ao buscar dados {erro}")
-            return[]
+    editora_entry = ctk.CTkEntry(
+        frame_tela_edit_livros,
+        width=175,
+        height=20,
+        fg_color="#fff",
+        text_color="#000",
+        font=("Segoe UI Semibold", 11),
+        border_color="#7dbb8a",
+        border_width=1,
+        corner_radius=4
+    )
+    editora_entry.grid(row=4,column=1,sticky="e", pady=0,padx=20)
 
-    
+    quant_edit = ctk.CTkLabel(
+        frame_tela_edit_livros,
+        text="Quantidade",
+        font=("Segoe UI Semibold", 11),
+        text_color="#000"
+    )
+    quant_edit.grid(row=5,column=0,sticky="w",padx=(70,0),pady=(10,0))
+
+    quant_entry = ctk.CTkEntry(
+        frame_tela_edit_livros,
+        width=175,
+        height=20,
+        fg_color="#fff",
+        text_color="#000",
+        font=("Segoe UI Semibold",11),
+        border_color="#7dbb8a",
+        border_width=1,
+        corner_radius=4
+    )
+    quant_entry.grid(row=6, column=0, sticky="w",padx=20,pady=0)
+
+    isbn_edit = ctk.CTkLabel(
+        frame_tela_edit_livros,
+        text="ISBN",
+        font=("Segoe UI Semibold", 11),
+        text_color="#000"
+    )
+    isbn_edit.grid(row=5,column=1,sticky="e", padx=(0,90),pady=(10,0))
+
+    isbn_entry = ctk.CTkEntry(
+        frame_tela_edit_livros,
+        width=175,
+        height=20,
+        fg_color="#fff",
+        text_color="#000",
+        font=("Segoe UI Semibold", 11),
+        border_color="#7dbb8a",
+        border_width=1,
+        corner_radius=4
+    )
+    isbn_entry.grid(row=6,column=1,sticky="e", pady=0,padx=20)
+
+    label_edit_genero = ctk.CTkLabel(
+        frame_tela_edit_livros,
+        text="Gênero",
+        font=("Segoe UI Semibold", 11),
+        text_color="#000"
+    )
+    label_edit_genero.grid(row=7,column=0,sticky="w",padx=(80,0),pady=(10,0))
+
+    lista_generos = carregar_generos()
+    lista_autores = carregar_autores()
+
+    combo_edit_genero = ctk.CTkComboBox(
+        frame_tela_edit_livros,
+        values=lista_generos,
+        width=200,
+        height=20,
+        fg_color="#fff",
+        text_color="#000",
+        font=("Segoe UI Semibold", 12),
+        border_color="#7dbb8a",
+        border_width=1,
+        corner_radius=4
+    )
+    combo_edit_genero.grid(row=8, column=0,sticky="w",padx=20,pady=0)
+
+    label_edit_autor = ctk.CTkLabel(
+        frame_tela_edit_livros,
+        text="Autor",
+        font=("Segoe UI Semibold", 11),
+        text_color="#000"
+    )
+    label_edit_autor.grid(row=7,column=1,sticky="e", padx=(0,90),pady=(10,0))
+
+    combo_edit_autor = ctk.CTkComboBox(
+        frame_tela_edit_livros,
+        values=lista_autores,
+        width=200,
+        height=20,
+        fg_color="#fff",
+        text_color="#000",
+        font=("Segoe UI Semibold", 12),
+        border_color="#7dbb8a",
+        border_width=1,
+        corner_radius=4
+    )
+    combo_edit_autor.grid(row=8,column=1,sticky="e", pady=0,padx=20)
+
+    #endregion
+
+    #region btn salvar livro editado
+
+    btn_salvar_livro_editado = ctk.CTkButton(
+        frame_tela_edit_livros,
+        text="Salvar Alterações",
+        command=atualizar_livro,
+        font=("Segoe UI Semibold", 15),
+        fg_color="#429259",
+        width=130,
+        height=30
+    )
+    btn_salvar_livro_editado.grid(row=9, column=0, columnspan=2,pady=40)
 
 #endregion
 
-
+#endregion
 
 
 
