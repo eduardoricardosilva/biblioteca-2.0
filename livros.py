@@ -31,6 +31,71 @@ def carregar_autores():
         return[]
 
 
+def buscar_livro():
+        try:
+            conn = sqlite3.connect("banco.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, titulo FROM livros ORDER BY id ASC")
+            resultado = cursor.fetchall()
+            conn.close()
+            lista_livros = [f"{livro[0]} - {livro[1]}" for livro in resultado]
+            return lista_livros
+        except sqlite3.Error as erro:
+            print(f"Erro ao buscar dados {erro}")
+            return[]
+
+
+def buscar_dados_livro(id_livro):
+        try:
+            conn = sqlite3.connect("banco.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT livros.titulo, livros.editora, livros.quantidade,livros.isbn, generos.nome, autores.nome FROM livros LEFT JOIN generos ON livros.genero_id = generos.id LEFT JOIN autores ON livros.autor_id = autores.id WHERE livros.id = ?", (id_livro,))
+            resultado_busca = cursor.fetchone()
+            conn.close()
+            return resultado_busca
+
+        except sqlite3.Error as erro:
+            print(f"Erro ao buscar livro: {erro}")
+            return None
+
+
+def preencher_campos(
+        livro_selecionado,
+        titulo_entry,
+        editora_entry,
+        quant_entry,
+        isbn_entry,
+        combo_edit_genero,
+        combo_edit_autor
+    ):
+
+        livro_id = livro_selecionado.split(" - ")[0]
+        dados = buscar_dados_livro(livro_id)
+
+        if not dados:
+            return
+
+        titulo = dados[0]
+        editora = dados[1]
+        quantidade = dados[2]
+        isbn = dados[3]
+        genero = dados[4]
+        autor = dados[5]
+
+        titulo_entry.delete(0, "end")
+        editora_entry.delete(0, "end")
+        quant_entry.delete(0, "end")
+        isbn_entry.delete(0, "end")
+
+        titulo_entry.insert(0, titulo)
+        editora_entry.insert(0, editora)
+        quant_entry.insert(0, quantidade)
+        isbn_entry.insert(0, isbn)
+
+        combo_edit_genero.set(genero)
+        combo_edit_autor.set(autor)
+
+
 #region BOTÕES DA TELA GERENCIAMENTOS de LIVROS
 
     #region config_tela_livros
@@ -167,6 +232,7 @@ def montar_tela_livros(janela_livros, funcao_voltar):
 
     del_livros = ctk.CTkButton(
         frame_del_livros,
+        command=lambda: montar_tela_excluir_livro(janela_livros,montar_tela_livros,funcao_voltar),
         text="🗑 Excluir Livro",
         font=("Segoe UI Semibold",15),
         anchor="center",
@@ -689,6 +755,7 @@ def montar_tela_cadastrar_livro(janela_cad_livros, voltar_livros, voltar_menu,):
 #region 2- do botão de editar livro
 
     #region config tela editar livro
+
 def montar_tela_editar_livro(janela_edit_livros, voltar_livros, voltar_menu,):
 
     
@@ -731,64 +798,6 @@ def montar_tela_editar_livro(janela_edit_livros, voltar_livros, voltar_menu,):
     #endregion
 
     #region funções tela editar livro
-
-#============FUNÇÔES TELA EDITAR LIVRO================
-
-    def buscar_livro():
-        try:
-            conn = sqlite3.connect("banco.db")
-            cursor = conn.cursor()
-            cursor.execute("SELECT id, titulo FROM livros ORDER BY titulo ASC")
-            resultado = cursor.fetchall()
-            conn.close()
-            lista_livros = [f"{livro[0]} - {livro[1]}" for livro in resultado]
-            return lista_livros
-        except sqlite3.Error as erro:
-            print(f"Erro ao buscar dados {erro}")
-            return[]
-
-    def buscar_dados_livro(id_livro):
-        try:
-            conn = sqlite3.connect("banco.db")
-            cursor = conn.cursor()
-            cursor.execute("SELECT livros.titulo, livros.editora, livros.quantidade,livros.isbn, generos.nome, autores.nome FROM livros LEFT JOIN generos ON livros.genero_id = generos.id LEFT JOIN autores ON livros.autor_id = autores.id WHERE livros.id = ?", (id_livro,))
-            resultado_busca = cursor.fetchone()
-            conn.close
-            return resultado_busca
-
-        except sqlite3.Error as erro:
-            print(f"Erro ao buscar livro: {erro}")
-            return None
-
-    def preencher_campos(livro_selecionado):
-        
-        livro_id = livro_selecionado.split(" - ")[0]
-        dados = buscar_dados_livro(livro_id)
-
-        if not dados:
-            return
-
-        titulo = dados[0]
-        editora = dados[1]
-        quantidade = dados[2]
-        isbn = dados[3]
-        genero = dados[4]
-        autor = dados[5]
-
-        titulo_entry.delete(0, "end")
-        editora_entry.delete(0, "end")
-        quant_entry.delete(0, "end")
-        isbn_entry.delete(0, "end")
-
-        titulo_entry.insert(0, titulo)
-        editora_entry.insert(0, editora)
-        quant_entry.insert(0, quantidade)
-        isbn_entry.insert(0, isbn)
-
-        combo_edit_genero.set(genero)
-        combo_edit_autor.set(autor)
-
-
 
     def atualizar_livro():
 
@@ -898,7 +907,14 @@ def montar_tela_editar_livro(janela_edit_livros, voltar_livros, voltar_menu,):
     combo_edit = ctk.CTkComboBox(
         frame_tela_edit_livros,
         values=buscar_livro(),
-        command=preencher_campos,
+        command=lambda livro_selecionado: preencher_campos(
+        livro_selecionado,
+        titulo_entry,
+        editora_entry,
+        quant_entry,
+        isbn_entry,
+        combo_edit_genero,
+        combo_edit_autor),
         width=250,
         height=25,
         fg_color="#fff",
@@ -1065,5 +1081,83 @@ def montar_tela_editar_livro(janela_edit_livros, voltar_livros, voltar_menu,):
 
 #endregion
 
+#region 3- do excluir livro
+
+    #region config tela excluir livro
+def montar_tela_excluir_livro(janela_delete_livros, voltar_livros, voltar_menu,):
+
+    
+
+    for widget in janela_delete_livros.winfo_children():
+        widget.destroy()
+
+    janela_delete_livros.geometry("500x550")
+    janela_delete_livros.configure(fg_color="#dff3df")
+    janela_delete_livros.grid_columnconfigure(0, weight=1)
+    janela_delete_livros.grid_rowconfigure(0, weight=1)
+    janela_delete_livros.title("Excluir Livro")
+
+    frame_tela_delete_livros = ctk.CTkFrame(
+        janela_delete_livros,
+        width=400,
+        height=450,
+        fg_color="#cae9ca"
+    )
+    frame_tela_delete_livros.grid(row=1,column=0, padx=20, pady=25)
+    frame_tela_delete_livros.grid_propagate(False)
+    frame_tela_delete_livros.grid_columnconfigure(0,weight=1)
+    frame_tela_delete_livros.grid_columnconfigure(1, weight=1)
+    
+
+    ctk.CTkButton(
+        janela_delete_livros,
+        text="← Voltar ao menu anterior",
+        command=lambda: voltar_livros(janela_delete_livros,voltar_menu),
+        font=("Segoe UI Semibold", 12),
+        text_color="#1E4D2B",
+        hover_color="#8abb8c",
+        width=150,
+        fg_color="#adc2ae",
+        border_color="#020e05",
+        border_width=1,
+        corner_radius=5
+    ).grid(row=0, column=0, sticky="w", padx=5, pady=5)
+
+    #endregion
+
+    #region titulo
+
+    label_delete_livro = ctk.CTkLabel(
+        frame_tela_delete_livros,
+        text="EXCLUIR LIVRO",
+        font=("Segoe UI Semibold",24),
+        text_color="#163822"
+        )
+    label_delete_livro.grid(row=0,column=0,columnspan=2,pady=10)
+
+    #endregion
+
+    #region para selecionar o livro para excluir
+
+    combo_delete_livro = ctk.CTkComboBox(
+        frame_tela_delete_livros,
+        values=buscar_livro(),
+        command=preencher_campos,
+        width=250,
+        height=25,
+        fg_color="#fff",
+        text_color="#000",
+        font=("Segoe UI Semibold", 12),
+        border_color="#7dbb8a",
+        border_width=1,
+        corner_radius=4
+    )
+    combo_delete_livro.grid(row=1, column=0,columnspan=2,pady=50)
+
+
+    #endregion
+
+
+#endregion
 
 
